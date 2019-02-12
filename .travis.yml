@@ -1,0 +1,37 @@
+---
+language: node_js
+services:
+  - docker
+node_js:
+  - 10
+notifications:
+  slack: cs4920-2018:SDt3tqEvra7QvkVy5wnY9faR
+before_install:
+  - ./docker.sh
+install:
+  - npm install
+cache:
+  directories:
+    - node_modules
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - npm test
+      after_script:
+        - npm run coverage
+
+    - stage: deploy-dev
+      script:
+        - ./deploy.sh staging
+      if: branch = dev
+    - stage: deploy-prod
+      script:
+        - ./deploy.sh prod
+      if: branch = master
+
+stages:
+  - test
+  - deploy-dev
+  - deploy-prod
