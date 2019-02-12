@@ -22,7 +22,6 @@ yarn-error.log*
 *.sln
 *.sw*
 
-/public
 /db
 test.db
 *.zip

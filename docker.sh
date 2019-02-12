@@ -13,12 +13,12 @@ docker run \
     --env 'ACCEPT_EULA=Y' \
     --env "SA_PASSWORD=$LOCAL_SQL_PASSWORD" \
     -p 1433:1433 \
-    -d microsoft/mssql-server-linux:2017-latest 
+    -d microsoft/mssql-server-linux:2017-latest
 
-sleep 20
+sleep 10
 
 docker exec -it $DOCKER_NAME /opt/mssql-tools/bin/sqlcmd \
    -S localhost,1433 -U SA -P "$LOCAL_SQL_PASSWORD" \
    -Q 'CREATE DATABASE testdb'
- 
+
 # really this should be a dockerfile as with all db config \_(* *)_/
