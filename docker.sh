@@ -15,7 +15,7 @@ docker run \
     -p 1433:1433 \
     -d microsoft/mssql-server-linux:2017-latest 
 
-sleep 20
+sleep 40
 
 docker exec -it $DOCKER_NAME /opt/mssql-tools/bin/sqlcmd \
    -S localhost,1433 -U SA -P "$LOCAL_SQL_PASSWORD" \
