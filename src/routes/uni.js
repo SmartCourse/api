@@ -4,6 +4,9 @@ const uniController = require('../controllers/uni')
 const reportController = require('../controllers/report')
 const { cacheResponse, isModOrHigher } = require('../utils/helpers')
 
+// no cache here
+uni.get('/feed', uniController.getFeed)
+
 /* This doesn't change much */
 uni.use(cacheResponse)
 
