@@ -102,4 +102,23 @@ describe('Uni route testing', function () {
             })
         )
     })
+
+    describe('GET uni/feed', () => {
+        let getRequest
+
+        before(() => {
+            getRequest = supertest
+                .get('/api/uni/feed')
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200)
+            return getRequest
+        })
+
+        it('has 10 items', () =>
+            getRequest.then(({ body }) => {
+                expect(body).to.have.lengthOf(10)
+            })
+        )
+    })
 })
