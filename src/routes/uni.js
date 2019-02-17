@@ -2,10 +2,10 @@ const express = require('express')
 const uni = express.Router()
 const uniController = require('../controllers/uni')
 const reportController = require('../controllers/report')
-const { cacheResponse, isModOrHigher } = require('../utils/helpers')
+const { cacheResponse, isModOrHigher, cache } = require('../utils/helpers')
 
-// no cache here
-uni.get('/feed', uniController.getFeed)
+// cache response serverside for 5 seconds
+uni.get('/feed', cache(5), uniController.getFeed)
 
 /* This doesn't change much */
 uni.use(cacheResponse)
