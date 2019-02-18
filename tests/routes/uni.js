@@ -115,9 +115,15 @@ describe('Uni route testing', function () {
             return getRequest
         })
 
-        it('has 10 items', () =>
+        it('has 10 questions', () =>
             getRequest.then(({ body }) => {
-                expect(body).to.have.lengthOf(10)
+                expect(body.questions).to.have.lengthOf(10)
+            })
+        )
+
+        it('has 10 reviews', () =>
+            getRequest.then(({ body }) => {
+                expect(body.reviews).to.have.lengthOf(10)
             })
         )
     })

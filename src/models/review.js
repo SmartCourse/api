@@ -68,6 +68,23 @@ class Review {
     }
 
     /**
+     * Get latestReviews
+     * @param {number} limit
+     */
+    getLatestReviews(limit = 10) {
+        return this.db
+            .run(`SELECT r.*, cou.code, (SELECT COUNT(com.reviewID)
+                FROM ${COMMENTS} com
+                WHERE com.reviewID = r.id) as numResponses
+                FROM ${REVIEWS} r
+                JOIN ${COURSES} cou ON r.courseID=cou.id
+                ORDER BY r.timestamp DESC
+                OFFSET 0 ROWS
+                FETCH NEXT ${limit} ROWS ONLY`
+            )
+    }
+
+    /**
      * Gets the total number of reviews for a course
      * @param   {string} code        The code of the course
      * @returns {object}
