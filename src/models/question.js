@@ -79,6 +79,23 @@ class Question {
     }
 
     /**
+     * Get latestQuestions
+     * @param {number} limit
+     */
+    getLatestQuestions(limit = 10) {
+        return this.db
+            .run(`SELECT q.*, cou.code, (SELECT COUNT(com.questionID)
+                FROM ${COMMENTS} com
+                WHERE com.questionID = q.id) as numAnswers
+                FROM ${QUESTIONS} q
+                JOIN ${COURSES} cou on q.courseID=cou.id
+                ORDER BY q.timestamp DESC
+                OFFSET 0 ROWS
+                FETCH NEXT ${limit} ROWS ONLY`
+            )
+    }
+
+    /**
      * Gets the total number of questions for a course
      * @param   {string} code        The code of the course duh
      * @returns {object}
