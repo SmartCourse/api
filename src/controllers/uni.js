@@ -49,14 +49,13 @@ exports.getFeed = function(_, res, next) {
                 questions,
                 Promise.all(questions.map(question => likesModel.getLikes({ type: TABLE_NAMES.QUESTIONS, id: question.id }))),
                 Promise.all(questions.map(question => userModel.getPublicProfile(question.userID)))
-            ]).then(([questions, likes, users]) => {
-                for (let i = 0; i < questions.length; i++) {
-                    delete questions[i].userID
-                    questions[i].likes = likes[i].likes
-                    questions[i].user = users[i]
-                }
-                return questions
-            })
+            ]).then(([questions, likes, users]) =>
+                questions.map((q, index) => ({
+                    ...q,
+                    user: users[index],
+                    likes: likes[index].likes
+                }))
+            )
         )
         .then(getResponseHandler(res))
         .catch(next)
