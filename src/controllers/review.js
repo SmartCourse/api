@@ -17,7 +17,7 @@ exports.getReview = function ({ user, params }, res, next) {
     const userPermissions = (user && user.permissions) || PERMISSIONS_ANON
 
     Promise.all([
-        reviewModel.getReview(params.id),
+        reviewModel.getReview(params.code, params.id),
         likesModel.getLikes({ type: TABLE_NAMES.REVIEWS, id: params.id }),
         likesModel.getUserLiked({ type: TABLE_NAMES.REVIEWS, id: params.id, userID })
     ])
