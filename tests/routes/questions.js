@@ -2,6 +2,7 @@ const app = require('../../src')
 const assert = require('assert')
 const supertest = require('supertest')(app)
 const { expect } = require('chai')
+const { ERRORS } = require('../../src/error/constants')
 
 describe('Test question routes', () => {
     describe('GET /api/course/ACCT1501/question/1', () => {
@@ -29,6 +30,24 @@ describe('Test question routes', () => {
         it('question has a course code', () =>
             request.then(({ body }) =>
                 expect(body.courseID).is.a('number'))
+        )
+    })
+
+    describe('GET /api/course/ACCT1501/question/10 (error)', () => {
+        let request
+
+        before(() => {
+            request = supertest
+                .get('/api/course/ACCT1501/question/10')
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(404)
+            return request
+        })
+
+        it('has correct error code', () =>
+            request.then(({ body }) =>
+                expect(body.code).to.equal(ERRORS.QUESTION.MISSING.code))
         )
     })
 
