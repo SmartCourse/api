@@ -3,13 +3,14 @@ const course = express.Router()
 const courseController = require('../controllers/course')
 const questionRouter = require('./question')
 const reviewRouter = require('./review')
+const { cache } = require('../utils/cache')
 
 /** child routes */
 course.use('/:code/review', reviewRouter)
 course.use('/:code/question', questionRouter)
 
 /* Return all courses in the database */
-course.get('/', courseController.getCourses)
+course.get('/', cache(5), courseController.getCourses)
 
 /* Get the course data for a specific course id */
 course.get('/:code', courseController.getCourse)

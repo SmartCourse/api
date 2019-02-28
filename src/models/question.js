@@ -93,6 +93,7 @@ class Question {
                 WHERE com.questionID = q.id) as numAnswers
                 FROM ${QUESTIONS} q
                 JOIN ${COURSES} cou on q.courseID=cou.id
+                WHERE q.pinned != 1
                 ORDER BY q.timestamp DESC
                 OFFSET 0 ROWS
                 FETCH NEXT ${limit} ROWS ONLY`
