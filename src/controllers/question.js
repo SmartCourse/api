@@ -17,7 +17,7 @@ exports.getQuestion = function ({ user, params }, res, next) {
     const userPermissions = (user && user.permissions) || PERMISSIONS_ANON
 
     Promise.all([
-        questionModel.getQuestion(params.id),
+        questionModel.getQuestion(params.code, params.id),
         likesModel.getLikes({ type: TABLE_NAMES.QUESTIONS, id: params.id }),
         likesModel.getUserLiked({ type: TABLE_NAMES.QUESTIONS, id: params.id, userID })
     ])

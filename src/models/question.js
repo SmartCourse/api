@@ -14,15 +14,19 @@ class Question {
 
     /**
      * Gets specific question corresponding to an id.
-     * @param   {id}      questionID Required id param.
-     * @returns {object}             Single question
+     * @param   {string}    code    course code.
+     * @param   {number}    id      id of the question.
+     * @throws  {APIError}
+     * @returns {object}            single question
      */
-    getQuestion(id) {
+    getQuestion(code, id) {
         return this.db
-            .run(`SELECT * FROM ${QUESTIONS} WHERE id=@id`,
-                {
-                    [QUESTIONS]: { id }
-                })
+            .run(`SELECT * FROM ${QUESTIONS} q
+            WHERE q.id=@id AND q.courseID=(SELECT c.id FROM ${COURSES} c WHERE c.code=@code)`,
+            {
+                [QUESTIONS]: { id },
+                [COURSES]: { code }
+            })
             .then(([row]) => {
                 if (row) return row
                 throw new APIError(ERRORS.QUESTION.MISSING)

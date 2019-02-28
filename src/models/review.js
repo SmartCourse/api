@@ -24,16 +24,19 @@ class Review {
 
     /**
      * Gets specific review corresponding to an id.
-     * @param   {number}  id   Required id param.
+     * @param   {string}    code    course code.
+     * @param   {number}    id      id of the review.
      * @throws  {APIError}
-     * @returns {object}
+     * @returns {object}            single review
      */
-    getReview(id) {
+    getReview(code, id) {
         return this.db
-            .run(`SELECT * FROM ${REVIEWS} WHERE id=@id`,
-                {
-                    [REVIEWS]: { id }
-                })
+            .run(`SELECT * FROM ${REVIEWS} r
+            WHERE r.id=@id AND r.courseID=(SELECT c.id FROM ${COURSES} c WHERE c.code=@code)`,
+            {
+                [REVIEWS]: { id },
+                [COURSES]: { code }
+            })
             .then(([row]) => {
                 if (row) return row
                 throw new APIError(ERRORS.REVIEW.MISSING)
