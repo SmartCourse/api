@@ -115,9 +115,9 @@ describe('Uni route testing', function () {
             return getRequest
         })
 
-        it('has 10 questions', () =>
+        it('has 2 questions', () =>
             getRequest.then(({ body }) => {
-                expect(body.questions).to.have.lengthOf(10)
+                expect(body.questions).to.have.lengthOf(2)
             })
         )
 

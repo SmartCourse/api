@@ -8,8 +8,8 @@ const { cacheResponse, isModOrHigher } = require('../utils/helpers')
 // cache response serverside for 5 seconds
 uni.get('/feed', cache(5), uniController.getFeed)
 
-/* This doesn't change much */
-uni.use(cacheResponse)
+/* Cache these routes and these routes alone */
+uni.get(/\/(faculties|degrees|sessions)/, cacheResponse)
 
 /* Return all faculties in the database */
 uni.get('/faculties', uniController.getFaculties)
