@@ -1,6 +1,6 @@
 {
   "name": "smartcourse-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "start": "npm run db-init && cross-env NODE_ENV=test LOG=true npx nodemon ./src/bin/www",
