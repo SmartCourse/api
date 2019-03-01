@@ -32,9 +32,9 @@ const DEFAULT_CONFIG = {
 }
 
 const STDIO_OPTIONS = {
-    drop: {args: 1, description: 'Drop tables first - \'all\', \'data\' or \'none\'. \'data\' includes users, reviews, questions, comments, likes, reports etc..'},
-    create: {args: 1, description: 'Create tables after dropping - \'all\' or \'none\'.'},
-    init: {args: 1, description: 'Initialise tables after creation - \'test\', \'basic\', \'static\', \'none\'. \'static\' includes university data. \'basic\' is \'static\' plus admin users and FAQs. \'test\' is \'basic\' plus test reviews, comments etc..'}
+    drop: { args: 1, description: 'Drop tables first - \'all\', \'data\' or \'none\'. \'data\' includes users, reviews, questions, comments, likes, reports etc..' },
+    create: { args: 1, description: 'Create tables after dropping - \'all\' or \'none\'.' },
+    init: { args: 1, description: 'Initialise tables after creation - \'test\', \'basic\', \'static\', \'none\'. \'static\' includes university data. \'basic\' is \'static\' plus admin users and FAQs. \'test\' is \'basic\' plus test reviews, comments etc..' }
 }
 
 const VALID_OPTIONS = {
@@ -67,11 +67,11 @@ exports.getConfig = function() {
     }
 
     // default to most conservative config
-    const default_config = TESTING ? DEFAULT_CONFIG.TESTING :
-                           STAGING ? DEFAULT_CONFIG.STAGING :
-                           DEFAULT_CONFIG.PRODUCTION
+    const defaultConfig = TESTING ? DEFAULT_CONFIG.TESTING
+        : STAGING ? DEFAULT_CONFIG.STAGING
+            : DEFAULT_CONFIG.PRODUCTION
     // override defaults with specific options
-    return Object.entries(default_config)
+    return Object.entries(defaultConfig)
         .reduce((acc, [optName, optDefault]) => {
             acc[optName] = opts[optName] ? opts[optName] : optDefault
             return acc

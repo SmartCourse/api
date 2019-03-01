@@ -1,4 +1,4 @@
-const { PRODUCTION, TESTING } = require('../../src/models/constants')
+const { PRODUCTION } = require('../../src/models/constants')
 const { getConfig } = require('./config')
 const stdio = require('stdio')
 const db = require('../../src/models/db')
@@ -6,16 +6,15 @@ const { init } = require('./init_sql')
 
 // Wait until a connection is made
 db.on('ready', async function () {
-
     const config = getConfig()
 
     // Safety prompt
     if (PRODUCTION) {
         // list of bad things
         const naughty = [
-            {bad: config.drop !== 'none', message: 'WARNING: You are about to DELETE ALL USER DATA on production!'},
-            {bad: config.init !== 'none', message: `WARNING: You are about to insert ${config.init} data on production!`}
-        ].filter(({bad}) => bad).map(({message}) => message) // just keep the messages
+            { bad: config.drop !== 'none', message: 'WARNING: You are about to DELETE ALL USER DATA on production!' },
+            { bad: config.init !== 'none', message: `WARNING: You are about to insert ${config.init} data on production!` }
+        ].filter(({ bad }) => bad).map(({ message }) => message) // just keep the messages
 
         if (naughty.length) {
             // print the messages

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run db-init && cross-env NODE_ENV=test LOG=true npx nodemon ./src/bin/www",
-    "lint": "npx eslint src/**/*.js tests/**/*.js --fix",
+    "lint": "npx eslint src/**/*.js tests/**/*.js scripts/db/**/*.js --fix",
     "test:lint": "npx eslint src/**/*.js tests/**/*.js --fix",
     "test:src": "npm run db-init && cross-env NODE_ENV=test npx nyc mocha --file tests/utils/*.js --file tests/routes/*.js --timeout 10000",
     "test": "npm run test:lint && npm run test:src",

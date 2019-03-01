@@ -350,7 +350,7 @@ ${
 }
 
 function createTables() {
-  return `
+    return `
     BEGIN TRANSACTION;
     IF NOT EXISTS(SELECT * FROM sysobjects WHERE name='${TABLE_NAMES.FACULTIES}' AND xtype='U')
         CREATE TABLE ${TABLE_NAMES.FACULTIES} (
