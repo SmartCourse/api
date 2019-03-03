@@ -350,7 +350,7 @@ ${
 }
 
 function createTables() {
-  return `
+    return `
     BEGIN TRANSACTION;
     IF NOT EXISTS(SELECT * FROM sysobjects WHERE name='${TABLE_NAMES.FACULTIES}' AND xtype='U')
         CREATE TABLE ${TABLE_NAMES.FACULTIES} (
@@ -385,7 +385,7 @@ function createTables() {
             uid VARCHAR(8000) UNIQUE NOT NULL,
             displayName VARCHAR(8000) UNIQUE NOT NULL,
             email VARCHAR(8000) UNIQUE NOT NULL,
-            joined DATETIME2 NOT NULL DEFAULT (CONVERT (date, GETDATE())),
+            joined DATETIME2 NOT NULL CONSTRAINT fk_joined_user DEFAULT SYSUTCDATETIME(),
             reputation INTEGER DEFAULT '0',
             degreeID INTEGER NOT NULL,
             gradYear VARCHAR(8000),
@@ -449,7 +449,7 @@ function createTables() {
             title VARCHAR(8000) NOT NULL,
             body VARCHAR(8000) NOT NULL,
             pinned INTEGER DEFAULT 0,
-            timestamp DATETIME2 NOT NULL DEFAULT (CONVERT (date, GETDATE())),
+            timestamp DATETIME2 NOT NULL CONSTRAINT fk_timestamp_question DEFAULT SYSUTCDATETIME(),
             CONSTRAINT fk_course_question
                 FOREIGN KEY (courseID)
                 REFERENCES ${TABLE_NAMES.COURSES} (id),
@@ -471,7 +471,7 @@ function createTables() {
             teaching INTEGER DEFAULT '0',
             workload INTEGER DEFAULT '0',
             session INTEGER NOT NULL,
-            timestamp DATETIME2 NOT NULL DEFAULT (CONVERT (date, GETDATE())),
+            timestamp DATETIME2 NOT NULL CONSTRAINT fk_timestamp_review DEFAULT SYSUTCDATETIME(),
             CONSTRAINT fk_course_review
                 FOREIGN KEY (courseID)
                 REFERENCES ${TABLE_NAMES.COURSES} (id),
@@ -491,7 +491,7 @@ function createTables() {
             commentParent INTEGER,
             userID INTEGER NOT NULL,
             body VARCHAR(8000) NOT NULL,
-            timestamp DATETIME2 NOT NULL DEFAULT (CONVERT (date, GETDATE())),
+            timestamp DATETIME2 NOT NULL CONSTRAINT fk_timestamp_comment DEFAULT SYSUTCDATETIME(),
             CONSTRAINT fk_question_comment
                 FOREIGN KEY (questionID)
                 REFERENCES ${TABLE_NAMES.QUESTIONS} (id),
@@ -527,7 +527,7 @@ function createTables() {
             userID INTEGER NOT NULL,
             reason VARCHAR(8000) NOT NULL,
             reviewed BIT NOT NULL DEFAULT '0',
-            timestamp DATETIME2 NOT NULL DEFAULT (CONVERT (date, GETDATE())),
+            timestamp DATETIME2 NOT NULL CONSTRAINT fk_timestamp_report DEFAULT SYSUTCDATETIME(),
             CONSTRAINT fk_course_report
                 FOREIGN KEY (courseID)
                 REFERENCES ${TABLE_NAMES.COURSES} (id),
