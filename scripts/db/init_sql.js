@@ -544,6 +544,48 @@ function createTables() {
                 FOREIGN KEY (userID)
                 REFERENCES ${TABLE_NAMES.USERS} (id)
         );
+    
+    IF NOT EXISTS(SELECT * FROM sysobjects WHERE name='${TABLE_NAMES.SUBSCRIPTIONS}' AND xtype='U')
+        CREATE TABLE ${TABLE_NAMES.SUBSCRIPTIONS} (
+            userID INTEGER NOT NULL,
+            questionID INTEGER,
+            reviewID INTEGER,
+            CONSTRAINT fk_question_subscription
+                FOREIGN KEY (questionID)
+                REFERENCES ${TABLE_NAMES.QUESTIONS} (id),
+            CONSTRAINT fk_question_subscription
+                FOREIGN KEY (reviewID)
+                REFERENCES ${TABLE_NAMES.REVIEWS} (id),
+            CONSTRAINT fk_user_subscription
+                FOREIGN KEY (userID)
+                REFERENCES ${TABLE_NAMES.USERS} (id)
+        );
+    
+    IF NOT EXISTS(SELECT * FROM sysobjects WHERE name='${TABLE_NAMES.SETTINGS}' AND xtype='U')
+        CREATE TABLE ${TABLE_NAMES.SETTINGS} (
+            userID INTEGER NOT NULL,
+            key VARCHAR(8000),
+            value VARCHAR(8000),
+            CONSTRAINT fk_user_setting
+                FOREIGN KEY (userID)
+                REFERENCES ${TABLE_NAMES.USERS} (id)
+        );
+
+    IF NOT EXISTS(SELECT * FROM sysobjects WHERE name='${TABLE_NAMES.NOTIFY_QUEUE}' AND xtype='U')
+        CREATE TABLE ${TABLE_NAMES.NOTIFY_QUEUE} (
+            id INTEGER PRIMARY KEY IDENTITY(1,1),
+            userID INTEGER NOT NULL,
+            userEmail VARCHAR(8000) NOT NULL,
+            type VARCHAR(8000) NOT NULL,
+            course VARCHAR(8000),
+            title VARCHAR(8000),
+            body VARCHAR(8000),
+            author VARCHAR(8000),
+            timestamp DATETIME2 NOT NULL CONSTRAINT fk_timestamp_notify_queue DEFAULT SYSUTCDATETIME(),
+            CONSTRAINT fk_user_notify_queue
+                FOREIGN KEY (userID)
+                REFERENCES ${TABLE_NAMES.USERS} (id)
+        );
 
     COMMIT;`
 }

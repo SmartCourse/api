@@ -43,7 +43,10 @@ exports.TABLE_NAMES = {
     DEGREES: 'degrees',
     FACULTIES: 'faculties',
     SESSIONS: 'sessions',
-    REPORTS: 'reports'
+    REPORTS: 'reports',
+    SUBSCRIPTIONS: 'subscriptions',
+    SETTINGS: 'settings',
+    NOTIFY_QUEUE: 'notify_queue'
 }
 
 // Table Columns
@@ -406,6 +409,72 @@ exports.TABLE_COLUMNS = {
         reviewed: {
             type: TYPES.Bit,
             options: { nullable: false }
+        },
+        timestamp: {
+            type: TYPES.DateTime2,
+            options: { nullable: false }
+        }
+    },
+    [exports.TABLE_NAMES.SUBSCRIPTIONS]: {
+        userID: {
+            type: TYPES.Int,
+            options: { nullable: false }
+        },
+        questionID: {
+            type: TYPES.Int,
+            options: { nullable: true }
+        },
+        reviewID: {
+            type: TYPES.Int,
+            options: { nullable: true }
+        }
+    },
+    [exports.TABLE_NAMES.SETTINGS]: {
+        userID: {
+            type: TYPES.Int,
+            options: { nullable: false }
+        },
+        key: {
+            type: TYPES.VarChar,
+            options: { nullable: false }
+        },
+        value: {
+            type: TYPES.VarChar,
+            options: { nullable: false }
+        }
+    },
+    [exports.TABLE_NAMES.NOTIFY_QUEUE]: {
+        id: {
+            type: TYPES.Int,
+            options: { nullable: false }
+        },
+        userID: {
+            type: TYPES.Int,
+            options: { nullable: false }
+        },
+        userEmail: {
+            type: TYPES.VarChar,
+            options: { nullable: false }
+        },
+        type: {
+            type: TYPES.VarChar,
+            options: { nullable: false }
+        },
+        course: {
+            type: TYPES.VarChar,
+            options: { nullable: true }
+        },
+        title: {
+            type: TYPES.VarChar,
+            options: { nullable: true }
+        },
+        body: {
+            type: TYPES.VarChar,
+            options: { nullable: true }
+        },
+        author: {
+            type: TYPES.VarChar,
+            options: { nullable: true }
         },
         timestamp: {
             type: TYPES.DateTime2,
