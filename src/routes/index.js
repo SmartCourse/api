@@ -13,8 +13,8 @@ api.use('/course', courseRouter)
 api.use('/subject', subjectRouter)
 
 /* Root API for debugging */
-api.get('/', function (req, res) {
-    res.send('<h1>Welcome to the API</h1>')
+api.get('/', function (_, res) {
+    res.sendStatus(200)
 })
 
 api.use('*', function (_, res) {

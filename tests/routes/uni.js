@@ -30,7 +30,7 @@ describe('Uni route testing', function () {
             })
     )
 
-    describe('GET uni/reports', () => {
+    describe.only('GET uni/reports', () => {
         let request1, request2, request3
         const report = { reason: 'It suuucks' }
         let getRequest
@@ -56,16 +56,15 @@ describe('Uni route testing', function () {
                 .set('Authorization', `Bearer ${global.idToken1}`)
                 .expect(201)
             // get the reports
-            return Promise.all([request1, request2, request3])
-                .then(() => {
-                    getRequest = supertest
-                        .get('/api/uni/reports')
-                        .set('Accept', 'application/json')
-                        .set('Authorization', `Bearer ${global.idTokenSuper}`)
-                        .expect('Content-Type', /json/)
-                        .expect(200)
-                    return getRequest
-                })
+            getRequest = Promise.all([request1, request2, request3])
+                .then(() => supertest
+                    .get('/api/uni/reports')
+                    .set('Accept', 'application/json')
+                    .set('Authorization', `Bearer ${global.idTokenSuper}`)
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                )
+            return getRequest
         })
 
         it('has 3 entries', () =>
@@ -81,6 +80,36 @@ describe('Uni route testing', function () {
             })
         )
         // NOTE we don't check the number of reports because of the async report test for questions
+
+        describe('DELETE a report', () => {
+            let deleteRequest
+
+            before('delete a report', () => {
+                deleteRequest = getRequest.then(() =>
+                    supertest
+                        .delete('/api/uni/report/1')
+                        .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${global.idTokenSuper}`)
+                        .expect(200)
+                )
+
+                return deleteRequest
+            })
+
+            it('deletes', () =>
+                deleteRequest.then(
+                    () => supertest
+                        .get('/api/uni/reports')
+                        .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${global.idTokenSuper}`)
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .then(({ body }) => {
+                            expect(body.length).to.equal(2)
+                        })
+                )
+            )
+        })
     })
 
     describe('GET uni/reports (error)', () => {

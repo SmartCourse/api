@@ -60,3 +60,13 @@ exports.getReportSummary = function ({ user, query }, res, next) {
         .then(getResponseHandler(res))
         .catch(next)
 }
+
+exports.dismissReport = function ({ user, params }, res, next) {
+    if (user.permissions < PERMISSIONS_MOD) {
+        throw new APIError(ERRORS.MISC.AUTHORIZATION)
+    }
+
+    reportModel.dismissReport(params.id)
+        .then(getResponseHandler(res))
+        .catch(next)
+}

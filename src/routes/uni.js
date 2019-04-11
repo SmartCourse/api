@@ -23,4 +23,7 @@ uni.get('/sessions', uniController.getSessions)
 /* Return all posts with reports, sorted by number of reports */
 uni.get('/reports', isModOrHigher, reportController.getReportSummary)
 
+/* Delete the relevant report */
+uni.delete('/report/:id', isModOrHigher, reportController.dismissReport)
+
 module.exports = uni
