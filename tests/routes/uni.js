@@ -9,6 +9,7 @@ describe('Uni route testing', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200)
+            .then(_ => _)
     )
 
     it('GET uni/faculties', () =>
@@ -17,6 +18,7 @@ describe('Uni route testing', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200)
+            .then(_ => _)
     )
 
     it('GET uni/sessions', () =>
@@ -43,29 +45,35 @@ describe('Uni route testing', function () {
                 .set('Authorization', `Bearer ${global.idToken0}`)
                 .send(report)
                 .expect(201)
+                .then(body => body)
+
             request2 = supertest
                 .post('/api/course/ACCT1501/question/1/report')
                 .send(report)
                 .set('Accept', 'application/json')
                 .set('Authorization', `Bearer ${global.idToken1}`)
                 .expect(201)
+                .then(body => body)
+
             request3 = supertest
                 .post('/api/course/ACCT1501/question/2/report')
                 .send(report)
                 .set('Accept', 'application/json')
                 .set('Authorization', `Bearer ${global.idToken1}`)
                 .expect(201)
+                .then(body => body)
+
             // get the reports
-            return Promise.all([request1, request2, request3])
-                .then(() => {
-                    getRequest = supertest
-                        .get('/api/uni/reports')
-                        .set('Accept', 'application/json')
-                        .set('Authorization', `Bearer ${global.idTokenSuper}`)
-                        .expect('Content-Type', /json/)
-                        .expect(200)
-                    return getRequest
-                })
+            getRequest = Promise.all([request1, request2, request3])
+                .then(() => supertest
+                    .get('/api/uni/reports')
+                    .set('Accept', 'application/json')
+                    .set('Authorization', `Bearer ${global.idTokenSuper}`)
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .then(body => body)
+                )
+            return getRequest
         })
 
         it('has 3 entries', () =>
@@ -81,6 +89,37 @@ describe('Uni route testing', function () {
             })
         )
         // NOTE we don't check the number of reports because of the async report test for questions
+
+        describe('DELETE a report', () => {
+            let deleteRequest
+
+            before('delete a report', () => {
+                deleteRequest = getRequest.then(() =>
+                    supertest
+                        .delete('/api/uni/report/1')
+                        .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${global.idTokenSuper}`)
+                        .expect(200)
+                        .then(res => res)
+                )
+
+                return deleteRequest
+            })
+
+            it('deletes', () =>
+                deleteRequest.then(
+                    () => supertest
+                        .get('/api/uni/reports')
+                        .set('Accept', 'application/json')
+                        .set('Authorization', `Bearer ${global.idTokenSuper}`)
+                        .expect('Content-Type', /json/)
+                        .expect(200)
+                        .then(({ body }) => {
+                            expect(body.length).to.equal(2)
+                        })
+                )
+            )
+        })
     })
 
     describe('GET uni/reports (error)', () => {
@@ -93,6 +132,8 @@ describe('Uni route testing', function () {
                 .set('Authorization', `Bearer ${global.idToken0}`)
                 .expect('Content-Type', /json/)
                 .expect(403)
+                .then(data => data)
+
             return getRequest
         })
 
@@ -112,6 +153,8 @@ describe('Uni route testing', function () {
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
                 .expect(200)
+                .then(data => data)
+
             return getRequest
         })
 

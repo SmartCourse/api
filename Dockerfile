@@ -8,3 +8,9 @@ RUN echo yes | apt-get install -y msodbcsql
 RUN echo yes | apt-get install -y mssql-tools 
 RUN locale-gen en_US en_US.UTF-8 
 RUN dpkg-reconfigure -f noninteractive locales
+
+ENV PATH="/opt/mssql-tools/bin:${PATH}"
+ENV ACCEPT_EULA="Y"
+ARG SA_PASSWORD
+
+EXPOSE 1433

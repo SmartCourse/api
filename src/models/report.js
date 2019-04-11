@@ -43,6 +43,20 @@ class Report {
     }
 
     /**
+     * Report Id
+     * @param {string} reportId
+     */
+    dismissReport(reportId) {
+        return this.db
+            .run(
+                `DELETE ${REPORTS} WHERE id=@id;`,
+                {
+                    [REPORTS]: { id: reportId }
+                }
+            )
+    }
+
+    /**
      * Get all of dem reports for a given post
      * @param   {object} queryObject
      * @returns {Array}

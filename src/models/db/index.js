@@ -13,7 +13,7 @@ class DB extends EventEmitter {
         super()
 
         console.log('Connecting to database')
-        
+
         this.connections = []
         this.ready = false
 
