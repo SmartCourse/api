@@ -9,6 +9,7 @@ describe('Uni route testing', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200)
+            .then(_ => _)
     )
 
     it('GET uni/faculties', () =>
@@ -17,6 +18,7 @@ describe('Uni route testing', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200)
+            .then(_ => _)
     )
 
     it('GET uni/sessions', () =>
@@ -30,7 +32,7 @@ describe('Uni route testing', function () {
             })
     )
 
-    describe.only('GET uni/reports', () => {
+    describe('GET uni/reports', () => {
         let request1, request2, request3
         const report = { reason: 'It suuucks' }
         let getRequest
@@ -43,18 +45,24 @@ describe('Uni route testing', function () {
                 .set('Authorization', `Bearer ${global.idToken0}`)
                 .send(report)
                 .expect(201)
+                .then(body => body)
+
             request2 = supertest
                 .post('/api/course/ACCT1501/question/1/report')
                 .send(report)
                 .set('Accept', 'application/json')
                 .set('Authorization', `Bearer ${global.idToken1}`)
                 .expect(201)
+                .then(body => body)
+
             request3 = supertest
                 .post('/api/course/ACCT1501/question/2/report')
                 .send(report)
                 .set('Accept', 'application/json')
                 .set('Authorization', `Bearer ${global.idToken1}`)
                 .expect(201)
+                .then(body => body)
+
             // get the reports
             getRequest = Promise.all([request1, request2, request3])
                 .then(() => supertest
@@ -63,6 +71,7 @@ describe('Uni route testing', function () {
                     .set('Authorization', `Bearer ${global.idTokenSuper}`)
                     .expect('Content-Type', /json/)
                     .expect(200)
+                    .then(body => body)
                 )
             return getRequest
         })
@@ -91,6 +100,7 @@ describe('Uni route testing', function () {
                         .set('Accept', 'application/json')
                         .set('Authorization', `Bearer ${global.idTokenSuper}`)
                         .expect(200)
+                        .then(res => res)
                 )
 
                 return deleteRequest
@@ -122,6 +132,8 @@ describe('Uni route testing', function () {
                 .set('Authorization', `Bearer ${global.idToken0}`)
                 .expect('Content-Type', /json/)
                 .expect(403)
+                .then(data => data)
+
             return getRequest
         })
 
@@ -141,6 +153,8 @@ describe('Uni route testing', function () {
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
                 .expect(200)
+                .then(data => data)
+
             return getRequest
         })
 
